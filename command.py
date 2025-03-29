@@ -1,6 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 import eel
+import time
 
 def speak(text):
     engine = pyttsx3.init('sapi5')
@@ -8,11 +9,11 @@ def speak(text):
     engine.setProperty('voice', voices[1].id)
     engine.setProperty('rate', 174)
     print(voices)
-
+    eel.DisplayMessage(text)
     engine.say(text)
     engine.runAndWait()
 
-@eel.expose
+
 def takecommand():
     r = sr.Recognizer()
     r.dynamic_energy_threshold = False  # Keep energy threshold fixed
@@ -20,6 +21,7 @@ def takecommand():
 
     with sr.Microphone() as source:
         print('Listening....')
+        eel.DisplayMessage('Start Speaking')
         '''r.pause_threshold=1
         r.adjust_for_ambient_noise(source)
 
@@ -30,9 +32,11 @@ def takecommand():
 
     try:
         print("Recognizing")
+        eel.DisplayMessage("Listening....")
         query = r.recognize_google(audio, language='en-in')
         print(f"You said: {query}")
-        speak(query)
+        eel.DisplayMessage(query)
+        time.sleep(2)
         return query.lower()
     except Exception as e:
         print("Could not recognize speech.")
@@ -44,7 +48,20 @@ def takecommand():
         print("Could not request results from Google Speech Recognition service.")
         return "Speech service is unavailable."
     
-    
-        
+@eel.expose
+def allCommands():
+
+    query = takecommand()
+    print(query)
+
+    if "open" in query:
+            from engine.features import openCommand
+            openCommand(query)
+    elif "on youtube": 
+        from engine.features import PlayYoutube
+        PlayYoutube(query)
+    else:
+        print("Not Run")
 
 
+    eel.ShowHood()
