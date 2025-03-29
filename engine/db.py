@@ -19,3 +19,7 @@ cursor.execute(query)
 # query = "INSERT INTO web_command VALUES (null,'Gmail', 'https://mail.google.com/mail/u/0/#inbox')"
 # cursor.execute(query)
 # conn.commit()
+
+# cursor.execute("UPDATE sys_command SET name = LOWER(name)")
+# cursor.execute("UPDATE web_command SET name = LOWER(name)")
+# conn.commit()
